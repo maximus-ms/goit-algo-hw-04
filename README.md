@@ -33,8 +33,8 @@ Let's compare next function:
 |    TimSort     | 0.000001 | 0.000004 | 0.000005 | 0.000007 | 0.000010 | 0.000012 | 0.000015 | 0.000018 | 0.000021 | 0.000024 | 0.000027 | 0.000030 | 0.000033 | 0.000036 | 0.000039 | 0.000054 |
 |  TimSortCopy   | 0.000002 | 0.000004 | 0.000007 | 0.000015 | 0.000017 | 0.000015 | 0.000019 | 0.000019 | 0.000023 | 0.000025 | 0.000029 | 0.000031 | 0.000034 | 0.000037 | 0.000041 | 0.000043 |
 
-![Array size 100 .. 1500](./pngs/100___1_500.png)\
-\
+![Array size 100 .. 1500](./pngs/100___1_500.png)
+####
 As we can see ```InsertionSort``` method is very slow, and even on 1500 elements execution time is > 100 msec. We can see a complexity $O(n^{2})$ from this graph.\
 So, we will skip this method for the next tests with larger arrays.
 All other algorithms are much faster, so it is hard to compare at this scale.
@@ -47,8 +47,8 @@ All other algorithms are much faster, so it is hard to compare at this scale.
 |    TimSort     | 0.000001 | 0.000416 | 0.000806 | 0.001329 | 0.001734 | 0.002292 | 0.002824 | 0.003130 | 0.003483 | 0.003998 | 0.004498 | 0.004846 | 0.005526 | 0.006040 | 0.006603 | 0.007188 |
 |  TimSortCopy   | 0.000004 | 0.000446 | 0.000819 | 0.001182 | 0.001771 | 0.002101 | 0.002706 | 0.003124 | 0.003694 | 0.004115 | 0.004553 | 0.005075 | 0.005612 | 0.006010 | 0.006642 | 0.007023 |
 
-![Array size 10_000 .. 150_000](./pngs/10_000___150_000.png)\
-\
+![Array size 10_000 .. 150_000](./pngs/10_000___150_000.png)
+####
 Now we can see than the ```MergeSort``` algorithm is quite fast (150_000 elements ~400msec). We can see that the time complexity looks like $O(n\cdot log(n))$.\
 But it is still far slower than embedded algorithms used by Python (it is expected even because the embedded algorithms are implemented on C/C++ inside an interpreter).\
 Let's go further and compare ```sort()``` and ```sorted()```.
@@ -60,8 +60,8 @@ Let's go further and compare ```sort()``` and ```sorted()```.
 |    TimSort     | 0.000001 | 0.004438 | 0.010044 | 0.015570 | 0.023929 | 0.027968 | 0.029667 | 0.034868 | 0.041817 | 0.049911 | 0.049315 | 0.056061 | 0.060977 | 0.065662 | 0.072821 | 0.075778 |
 |  TimSortCopy   | 0.000007 | 0.004406 | 0.009323 | 0.014684 | 0.020043 | 0.025983 | 0.033175 | 0.036559 | 0.040730 | 0.045935 | 0.051365 | 0.057907 | 0.061245 | 0.065748 | 0.073148 | 0.081220 |
 
-![Array size 100_000 .. 1_500_000](./pngs/100_000___1_500_000.png)\
-\
+![Array size 100_000 .. 1_500_000](./pngs/100_000___1_500_000.png)
+####
 At this step we got interesting results. Function ```sorted()``` is fast: 1_500_000 elements ~800 msec, but ```sort()``` is ~10 times faster.\
 Even more: if we want to get a new list it is still ~10 faster to ```new_list = old_list.copy().sort()``` than ```new_list = sorted(old_list)```. It can be explained by a few facts:
  - ```sorted()``` - more generic function which can work with different types of iterable data not only a list
