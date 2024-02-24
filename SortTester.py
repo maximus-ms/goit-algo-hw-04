@@ -16,6 +16,7 @@ def insertion_sort(data_):
         data[j + 1] = cur
     return data
 
+
 # Merge Sort
 def merge_sort(data):
     def merge(left, right):
@@ -52,10 +53,12 @@ def merge_sort(data):
 
     return merge(merge_sort(l_data), merge_sort(r_data))
 
-#Tim Sort
+
+# Tim Sort
 def tim_sort(data):
     data.sort()
     return data
+
 
 def tim_sort_copy(data):
     data_ = data.copy()
@@ -68,8 +71,8 @@ def tim_sorted(data):
 
 
 def is_sorted(data):
-    for i in range(len(data)-1):
-        if data[i] > data[i+1]:
+    for i in range(len(data) - 1):
+        if data[i] > data[i + 1]:
             return False
     return True
 
@@ -95,8 +98,10 @@ def test_functions(f_list, n_list, print_res=False):
     data_set = prepare_test_data(n_list, n_iter)
     res = {}
 
-    not print_res or print(f"| {'Sort method':^14} | {' | '.join([f"{str(n):^8}" for n in n_list])} |")
-    not print_res or print(f"|{'-'*16}" + f"|{'-'*10}" * (len(n_list)) + "|")
+    if print_res:
+        print(f"| {'Sort method':^14} | {' | '.join([f"{str(n):^8}" for n in n_list])} |")
+        print(f"|{'-'*16}" + f"|{'-'*10}" * (len(n_list)) + "|")
+
     for f_name in f_list:
         fn = FUNCTIONS[f_name]
         f_name_to_print = f_name
@@ -106,37 +111,63 @@ def test_functions(f_list, n_list, print_res=False):
             data_ = data_set[test]
             for i in range(n_iter):
                 d = data_[i].copy()
-                if len(d)>1 and is_sorted(d):
-                    raise Exception("data is sorted, the test will not be representative")
+                if len(d) > 1 and is_sorted(d):
+                    raise Exception(
+                        "data is sorted, the test will not be representative"
+                    )
                 cumul_time += timeit.timeit(lambda: fn(d), number=1)
             measured_time.append(cumul_time / n_iter)
-        not print_res or print(f"| {f_name_to_print:^14} | {' | '.join([f"{n:^8.6f}" for n in measured_time])} |")
+        if print_res:
+            print(f"| {f_name_to_print:^14} | {' | '.join([f"{n:^8.6f}" for n in measured_time])} |")
         res[f_name] = measured_time
-    not print_res or print("\n")
+
+    if print_res:
+        print("\n")
 
     return pd.DataFrame(res)
 
 
 def main():
-    f_list = [ "InsertionSort", "MergeSort", "TimSorted", "TimSort", "TimSortCopy", ]
-    n_list = [i*100 for i in range(16)]
+    f_list = [
+        "InsertionSort",
+        "MergeSort",
+        "TimSorted",
+        "TimSort",
+        "TimSortCopy",
+    ]
+    n_list = [i * 100 for i in range(16)]
     res = test_functions(f_list, n_list, True)
     # print(res)
     # sns.lineplot(res)
 
-    f_list = [ "MergeSort", "TimSorted", "TimSort", "TimSortCopy", ]
-    n_list = [i*10000 for i in range(16)]
+    f_list = [
+        "MergeSort",
+        "TimSorted",
+        "TimSort",
+        "TimSortCopy",
+    ]
+    n_list = [i * 10000 for i in range(16)]
     res = test_functions(f_list, n_list, True)
     # print(res)
     # sns.lineplot(res)
 
-    f_list = [ "TimSorted", "TimSort", "TimSortCopy" ]
-    n_list = [i*100_000 for i in range(16)]
+    f_list = [
+        "TimSorted",
+        "TimSort",
+        "TimSortCopy",
+    ]
+    n_list = [i * 100_000 for i in range(16)]
     res = test_functions(f_list, n_list, True)
     # print(res)
     # sns.lineplot(res)
 
-    f_list = [ "InsertionSort", "MergeSort", "TimSorted", "TimSort", "TimSortCopy" ]
+    f_list = [
+        "InsertionSort",
+        "MergeSort",
+        "TimSorted",
+        "TimSort",
+        "TimSortCopy",
+    ]
     n_list = [2**i for i in range(16)]
     res = test_functions(f_list, n_list, True)
     # print(res)
