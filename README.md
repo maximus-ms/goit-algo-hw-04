@@ -59,6 +59,10 @@ Let's go further and compare ```sort()``` and ```sorted()```.
 |  TimSortCopy   | 0.000007 | 0.004406 | 0.009323 | 0.014684 | 0.020043 | 0.025983 | 0.033175 | 0.036559 | 0.040730 | 0.045935 | 0.051365 | 0.057907 | 0.061245 | 0.065748 | 0.073148 | 0.081220 |
 
 ![Array size 100_000 .. 1_500_000](./pngs/100_000___1_500_000.png)\
+Now we can see than the ```MergeSort``` algorithm is quite fast (150_000 elements ~400msec). We can see that the time complexity looks like $O(n\cdot log(n))$.\
+But it is still far slower than embedded algorithms used by Python (it is expected even because the embedded algorithms are implemented on C/C++ inside an interpreter).\
+Let's go further and compare ```sort()``` and ```sorted()```.
+
 At this step we got interesting results. Function ```sorted()``` is fast: 1_500_000 elements ~800 msec, but ```sort()``` is ~10 times faster.\
 Even more: if we want to get a new list it is still ~10 faster to ```new_list = old_list.copy().sort()``` than ```new_list = sorted(old_list)```. It can be explained by a few facts:
  - ```sorted()``` - more generic function which can work with different types of iterable data not only a list
