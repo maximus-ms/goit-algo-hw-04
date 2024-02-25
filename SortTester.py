@@ -1,7 +1,6 @@
 import timeit
 from numpy import random
-import seaborn as sns
-import pandas as pd
+import matplotlib.pyplot as plt
 
 
 # Insertion Sort
@@ -80,7 +79,15 @@ def is_sorted(data):
 def prepare_test_data(n_list, n_iter=4):
     test_data = {}
     for n in n_list:
-        test_data[n] = random.randint(0xFFFF, size=(n_iter, n))
+        generate_data = True
+        while generate_data:
+            generate_data = False
+            data = random.randint(0xFFFF, size=(n_iter, n))
+            for i in range(n_iter):
+                if len(data[i]) > 1 and is_sorted(data[i]):
+                    generate_data = True
+                    break
+        test_data[n] = data
     return test_data
 
 
@@ -104,62 +111,39 @@ def test_functions(f_list, n_list, print_res=False):
 
     for f_name in f_list:
         fn = FUNCTIONS[f_name]
-        f_name_to_print = f_name
         measured_time = []
         for test in data_set:
             cumul_time = 0
             data_ = data_set[test]
             for i in range(n_iter):
-                d = data_[i].copy()
-                if len(d) > 1 and is_sorted(d):
-                    raise Exception(
-                        "data is sorted, the test will not be representative"
-                    )
-                cumul_time += timeit.timeit(lambda: fn(d), number=1)
+                cumul_time += timeit.timeit(lambda: fn(data_[i].copy()), number=1)
             measured_time.append(cumul_time / n_iter)
         if print_res:
-            print(f"| {f_name_to_print:^14} | {' | '.join([f"{n:^8.6f}" for n in measured_time])} |")
+            print(f"| {f_name:^14} | {' | '.join([f"{n:^8.6f}" for n in measured_time])} |")
         res[f_name] = measured_time
 
     if print_res:
         print("\n")
 
-    return pd.DataFrame(res)
+    return res
 
+def plot_results(test_results, n_list):
+    plt.figure(figsize=(10, 6))
+    for sort_func_name, times in test_results.items():
+        plt.plot(n_list, times, label=sort_func_name)
+    plt.xlabel('Array Length')
+    plt.ylabel('Time (s)')
+    plt.title('Sorting Algorithm Performance')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
 
 def main():
-    f_list = [
-        "InsertionSort",
-        "MergeSort",
-        "TimSorted",
-        "TimSort",
-        "TimSortCopy",
-    ]
-    n_list = [i * 100 for i in range(16)]
-    res = test_functions(f_list, n_list, True)
-    # print(res)
-    # sns.lineplot(res)
+    tests = [100, 10_000, 100_000]
+    test_to_plot = tests[0]
 
-    f_list = [
-        "MergeSort",
-        "TimSorted",
-        "TimSort",
-        "TimSortCopy",
-    ]
-    n_list = [i * 10000 for i in range(16)]
-    res = test_functions(f_list, n_list, True)
-    # print(res)
-    # sns.lineplot(res)
-
-    f_list = [
-        "TimSorted",
-        "TimSort",
-        "TimSortCopy",
-    ]
-    n_list = [i * 100_000 for i in range(16)]
-    res = test_functions(f_list, n_list, True)
-    # print(res)
-    # sns.lineplot(res)
+    n_list = {}
+    test_results = {}
 
     f_list = [
         "InsertionSort",
@@ -168,10 +152,16 @@ def main():
         "TimSort",
         "TimSortCopy",
     ]
-    n_list = [2**i for i in range(16)]
-    res = test_functions(f_list, n_list, True)
-    # print(res)
-    # sns.lineplot(res)
+
+    for i, test in enumerate(tests):
+        n_list[test] = [i * test for i in range(16)]
+        test_results[test] = test_functions(f_list[i:], n_list[test], True)
+
+    plot_results(test_results[test_to_plot], n_list[test_to_plot])
+
+    # n_list_pow2 = [2**i for i in range(15)]
+    # test_results_pow2 = test_functions(f_list, n_list, True)
+    # plot_results(test_results_pow2, n_list_pow2)
 
 
 if __name__ == "__main__":
